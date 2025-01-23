@@ -1,8 +1,8 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
 // Redis client configuration
 const redisConfig = {
-  host: 'localhost',
+  host: process.env.REDIS_HOST || "localhost",
   port: 6379,
 };
 
@@ -13,7 +13,7 @@ export const redis = new Redis(redisConfig);
 export const CACHE_TTL = 30;
 
 // Cache key prefix
-export const CACHE_KEY_PREFIX = 'posts:';
+export const CACHE_KEY_PREFIX = "posts:";
 
 // Helper function to get cache key for all posts
-export const getPostsCacheKey = () => `${CACHE_KEY_PREFIX}all`; 
+export const getPostsCacheKey = () => `${CACHE_KEY_PREFIX}all`;

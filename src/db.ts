@@ -16,7 +16,7 @@ type DbConfig = {
 // PostgreSQL connection pool
 const dbConfig: DbConfig = {
   user: "postgres",
-  host: "localhost",
+  host: "postgres",
   database: "atelierdocker",
   password: "postgres",
   port: 5432,
@@ -46,12 +46,11 @@ export const initializeDatabase = async () => {
       const schemaPath = join(__dirname, "1737640629_init_post_table.sql");
       const schema = await readFile(schemaPath, "utf-8");
       await pool.query(schema);
-      
+
       // Record this migration
-      await pool.query(
-        "INSERT INTO migrations (name) VALUES ($1)",
-        ["initial_schema"]
-      );
+      await pool.query("INSERT INTO migrations (name) VALUES ($1)", [
+        "initial_schema",
+      ]);
       console.log("Database schema initialized successfully");
     } else {
       console.log("Database schema already initialized");
