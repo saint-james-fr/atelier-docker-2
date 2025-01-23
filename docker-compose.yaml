@@ -1,8 +1,17 @@
+# By default, Docker Compose (version 2 and higher) automatically creates a default network for your project.
+# All containers in the same docker-compose file can communicate with each other using their service names as hostnames.
+# This means:
+# - You don't need to specify a network in your docker-compose file.
+# - You can use the service name as the hostname to connect to other services.
+# - You can use the service name as the hostname to connect to other services.
+
 services:
-  atelier-docker-2:
-    image: atelier-docker-2
+  web:
     ports:
       - 3001:3001
+    # Without these volumes, your code would be copied into the container
+    #  during build time and become static.
+    # Any changes you make to your source code locally wouldn't be reflected in the running container unless you rebuild the image.
     volumes:
       - ./src:/app/src
       - ./package.json:/app/package.json
@@ -10,19 +19,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    networks:
-      - app-network
+    # This is necessary to wait for the redis and postgres services to be ready before starting the atelier-docker-2 service.
     depends_on:
       - redis
       - postgres
     environment:
       - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=atelierdocker
+      - POSTGRES_PORT=5432
+
   redis:
     image: redis:latest
     ports:
       - 6379:6379
-    networks:
-      - app-network
+
   postgres:
     image: postgres:latest
     ports:
@@ -32,9 +45,19 @@ services:
       - POSTGRES_DB=atelierdocker
       - POSTGRES_USER=postgres
       - POSTGRES_PORT=5432
-    networks:
-      - app-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-networks:
-  app-network:
-    driver: bridge
+# This is a named volume that will persist even if the container is removed.
+# This is the recommended approach because:
+# - It's managed by Docker and is more portable
+# - Avoids permission issues that often occur with bind mounts
+# - Ensures data persistence across container restarts
+# - Works consistently across different operating systems
+volumes:
+  postgres_data:
