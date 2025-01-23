@@ -43,7 +43,7 @@ export const initializeDatabase = async () => {
 
     // Only apply schema if it hasn't been run before
     if (rows.length === 0) {
-      const schemaPath = join(__dirname, "schema.sql");
+      const schemaPath = join(__dirname, "1737640629_init_post_table.sql");
       const schema = await readFile(schemaPath, "utf-8");
       await pool.query(schema);
       
