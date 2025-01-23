@@ -7,7 +7,12 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "tsx src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "docker:build": "docker build -t atelier-docker-2 .",
+    "docker:run": "docker run --name atelier-docker-2 -p 3001:3001 atelier-docker-2 ",
+    "docker:stop": "docker stop atelier-docker-2",
+    "docker:clean": "docker rm -f atelier-docker-2",
+    "docker:all": "npm run docker:stop; npm run docker:clean; npm run docker:build; npm run docker:run"
   },
   "author": "",
   "license": "ISC",
