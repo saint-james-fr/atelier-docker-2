@@ -1,3 +1,4 @@
+# Build a Dockerfile, exposing port 3001
 FROM node:20-alpine
 
 WORKDIR /app

@@ -16,7 +16,8 @@ type DbConfig = {
 // PostgreSQL connection pool
 const dbConfig: DbConfig = {
   user: "postgres",
-  host: "postgres",
+  // host: "postgres",
+  host: "localhost",
   database: "atelierdocker",
   password: "postgres",
   port: 5432,

@@ -1,0 +1,44 @@
+# By default, Docker Compose (version 2 and higher) automatically creates a default network for your project.
+# All containers in the same docker-compose file can communicate with each other using their service names as hostnames.
+# This means:
+# - You don't need to specify a network in your docker-compose file.
+# - You can use the service name as the hostname to connect to other services.
+# - You can use the service name as the hostname to connect to other services.
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    # Without these volumes, your code would be copied into the container
+    #  during build time and become static.
+    # Any changes you make to your source code locally wouldn't be reflected in the running container unless you rebuild the image.
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      # This is necessary to wait for the redis and postgres services to be ready before starting the atelier-docker-2 service.
+    depends_on:
+      #   - redis
+      - postgres
+    environment:
+      - REDIS_HOST=redis
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=atelierdocker
+      - POSTGRES_PORT=5432
+  # redis:
+  # stuff
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=atelierdocker
+      - POSTGRES_USER=postgres
+      - POSTGRES_PORT=5432
