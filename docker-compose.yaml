@@ -20,9 +20,9 @@ services:
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json
       # This is necessary to wait for the redis and postgres services to be ready before starting the atelier-docker-2 service.
-    depends_on:
-      #   - redis
-      - postgres
+    # depends_on:
+    #   - redis
+    # - postgres
     environment:
       - REDIS_HOST=redis
       - POSTGRES_HOST=postgres
@@ -33,12 +33,5 @@ services:
   # redis:
   # stuff
 
-  postgres:
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=atelierdocker
-      - POSTGRES_USER=postgres
-      - POSTGRES_PORT=5432
+  # postgres:
+  # stuff
