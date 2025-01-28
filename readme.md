@@ -17,6 +17,14 @@ Une API RESTful moderne construite avec Fastify et TypeScript, utilisant Postgre
 - Redis
 - npm ou yarn
 
+### PostgreSQL local
+
+```bash
+brew install postgresql@15 libpq
+brew link --force libpq
+brew services start postgresql@15
+```
+
 ## 🛠 Installation
 
 1. Clonez le dépôt :
